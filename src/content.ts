@@ -52,17 +52,11 @@
         inlineContainer.style.gap = '8px';
         inlineContainer.style.marginLeft = '12px';
         if (!res.ok) {
-          // fetch失敗（private等）はDevinボタンのみ
-          inlineContainer.appendChild(createButton('Devin', devinUrl));
+          // fetch失敗（private等）はDevinWikiボタンのみ
+          inlineContainer.appendChild(createButton('DevinWiki', devinUrl));
         } else {
-          const repoInfo = await res.json();
-          if (!repoInfo) return;
-          if (repoInfo.private) {
-            inlineContainer.appendChild(createButton('DevinWiki', devinUrl));
-          } else {
-            inlineContainer.appendChild(createButton('DeepWiki', deepwikiUrl));
-            inlineContainer.appendChild(createButton('GitMCP', gitmcpUrl));
-          }
+          inlineContainer.appendChild(createButton('DeepWiki', deepwikiUrl));
+          inlineContainer.appendChild(createButton('GitMCP', gitmcpUrl));
         }
         repoHeader.parentElement.appendChild(inlineContainer);
       }
