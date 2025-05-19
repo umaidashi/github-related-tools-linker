@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "GitHub Related Tools Linker",
+  "version": "1.0.0",
+  "description": "A Chrome extension that links to related tools for GitHub repositories",
+   "permissions": [],
+  "content_scripts": [
+    {
+      "matches": ["https://github.com/*/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "action": {
+    "default_icon": "icon.png"
+  }
+}
