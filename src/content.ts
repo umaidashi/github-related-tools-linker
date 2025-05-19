@@ -9,24 +9,10 @@
   // ここでGitHub APIを使ってpublicかどうか判定
   const apiUrl = `https://api.github.com/repos/${user}/${repo}`;
   fetch(apiUrl)
-    .then(res => {
-      if (!res.ok) return null;
-      return res.json();
-    })
-    .then(repoInfo => {
-      if (!repoInfo || repoInfo.private) return; // privateなら何もしない
-
+    .then(async res => {
       const deepwikiUrl = `https://deepwiki.com/${user}/${repo}`;
       const gitmcpUrl = `https://gitmcp.io/${user}/${repo}`;
-
-      const container = document.createElement('div');
-      container.style.position = 'fixed';
-      container.style.top = '100px';
-      container.style.right = '20px';
-      container.style.zIndex = '10000';
-      container.style.display = 'flex';
-      container.style.flexDirection = 'column';
-      container.style.gap = '8px';
+      const devinUrl = `https://app.devin.ai/wiki/${user}/${repo}`;
 
       const createButton = (label: string, url: string) => {
         const btn = document.createElement('button');
@@ -59,16 +45,25 @@
         return btn;
       };
 
-      // 配置先をGitHubのリポジトリ名の右側に変更
       const repoHeader = document.querySelector('strong[itemprop="name"]');
       if (repoHeader && repoHeader.parentElement) {
-        // 横並びにするためのラッパーdivを用意
         const inlineContainer = document.createElement('span');
         inlineContainer.style.display = 'inline-flex';
         inlineContainer.style.gap = '8px';
         inlineContainer.style.marginLeft = '12px';
-        inlineContainer.appendChild(createButton('DeepWiki', deepwikiUrl));
-        inlineContainer.appendChild(createButton('GitMCP', gitmcpUrl));
+        if (!res.ok) {
+          // fetch失敗（private等）はDevinボタンのみ
+          inlineContainer.appendChild(createButton('Devin', devinUrl));
+        } else {
+          const repoInfo = await res.json();
+          if (!repoInfo) return;
+          if (repoInfo.private) {
+            inlineContainer.appendChild(createButton('DevinWiki', devinUrl));
+          } else {
+            inlineContainer.appendChild(createButton('DeepWiki', deepwikiUrl));
+            inlineContainer.appendChild(createButton('GitMCP', gitmcpUrl));
+          }
+        }
         repoHeader.parentElement.appendChild(inlineContainer);
       }
     });
