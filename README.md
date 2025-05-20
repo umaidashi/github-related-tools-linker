@@ -7,7 +7,7 @@
 1. **リポジトリをクローン**
 
    ```bash
-   git clone <このリポジトリのURL>
+   git clone https://github.com/umaidashi/github-related-tools-linker.git
    cd github-related-tools-linker
    ```
 
